@@ -1,0 +1,17 @@
+{
+  "name": "cup-of-hackernoon",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/ricopella/cup-of-hackernoon.git",
+  "author": "Narin Sundarabhaya <nrs710@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "cheerio": "^1.0.0-rc.2",
+    "colors": "^1.1.2",
+    "express": "^4.15.4",
+    "express-handlebars": "^3.0.0",
+    "mongoose": "^4.11.10",
+    "request": "^2.81.0"
+  }
+}
