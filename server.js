@@ -21,6 +21,12 @@ db.on("error", function(error) {
 });
 
 
-// app.use("/", routes);
+app.use("/", routes);
+
+app.use((req, res, next) => {
+    res.status(404).send("Sorry can't find that!");
+    // console.error(err.stack).red
+});
+
 
 app.listen(port, () => { console.log(`==> 🌎  Listening on PORT ${port}. Visit http://localhost:${port}`.green) });
