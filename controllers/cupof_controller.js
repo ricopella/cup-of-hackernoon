@@ -3,7 +3,22 @@ const express = require("express"),
     request = require("request"),
     cheerio = require("cheerio"),
     mongojs = require("mongojs"),
-    db = mongojs("cupof", ["scrapedData"]);
+    Article = require("../models/Article"),
+    Comments = require("../models/Comments"),
+    mongoose = require("mongoose");
+
+mongoose.Promise = Promise;
+mongoose.connect("mongodb://localhost/cupof");
+
+const db = mongoose.connection;
+
+db.on("error", function(error) {
+    console.log("Database Error:", error);
+});
+
+db.once("open", function() {
+    console.log("Mongoose connection successful.");
+});
 
 router.get("/", (req, res) => {
 
@@ -14,14 +29,15 @@ router.get("/", (req, res) => {
 
 router.get("/all", (req, res) => {
 
-    db.scrapedData.find({}, (error, found) => {
+    Article.find({}, (error, doc) => {
         if (error) {
             console.log(error);
-        } else {
-            res.json(found);
+        }
+        // Or send the doc to the browser as a json object
+        else {
+            res.json(doc);
         }
     });
-
 })
 
 
@@ -30,31 +46,35 @@ router.get("/add", (req, res) => {
 
         let $ = cheerio.load(html);
 
-        let results = [];
+
 
         $(".postItem").each((i, element) => {
 
-            let link = $(element).children().attr("href");
-            let img = $(element).children().attr("style");
-            let title = $(element).children().text();
-            let desc = $(element).siblings().text();
+            let result = {};
 
+            result.link = $(element).children().attr("href");
+            result.title = $(element).children().text();
+            result.desc = $(element).siblings().text();
+
+            // small hack to remove the link from html element
+            let img = $(element).children().attr("style");
             let newArray = img.split(" ");
             let newnew = newArray[1].split('"');
-            let url = newnew[1];
+            result.url = newnew[1];
 
-            if (link !== undefined && title !== undefined) {
-                db.scrapedData.insert({
-                    title: title,
-                    link: link,
-                    desc: desc,
-                    img: url
-                });
-            }
+            let entry = new Article(result);
+
+            entry.save((err, doc) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log(doc);
+                }
+            })
         });
-        // res.send("Data was scraped!") 
+
     });
-    // return res.render("index");
+    res.send("Scrape Complete");
 })
 
 module.exports = router;
