@@ -11,21 +11,14 @@ mongoose.connect("mongodb://localhost/cupof");
 
 const db = mongoose.connection;
 
-db.on("error", function(error) {
-    console.log("Database Error:", error);
-});
+db.on("error", error => console.log("Database Error:", error));
 
-db.once("open", function() {
-    console.log("Mongoose connection successful.");
-});
+db.once("open", () => console.log("Mongoose connection successful."));
 
-router.get("/", (req, res) => {
+// index route
+router.get("/", (req, res) => res.render("index"));
 
-    res.render("index")
-
-});
-
-
+// retrieve all articles
 router.get("/articles", (req, res) => {
 
     Article.find({}, (error, doc) => {
@@ -37,6 +30,7 @@ router.get("/articles", (req, res) => {
     });
 })
 
+// scrape articles
 router.get("/add", (req, res) => {
     request("https://hackernoon.com/", (error, response, html) => {
 
@@ -48,7 +42,10 @@ router.get("/add", (req, res) => {
 
             result.link = $(element).children().attr("href");
             result.title = $(element).children().text();
-            result.desc = $(element).siblings().text();
+
+            // small hack to remove the title from the description
+            let desc = $(element).siblings().text();
+            result.desc = desc.replace(result.title, "");
 
             // small hack to remove the link from html element
             let img = $(element).children().attr("style");
@@ -66,12 +63,11 @@ router.get("/add", (req, res) => {
                 }
             })
         });
-
     });
     res.send("Scrape Complete");
 })
 
-
+// retrieve single article by id
 router.get("/articles/:id", (req, res) => {
 
     Article.findOne({ "_id": req.params.id })
@@ -79,12 +75,39 @@ router.get("/articles/:id", (req, res) => {
         .exec((error, doc) => {
             if (error) {
                 console.log(error);
-            }
-            // Otherwise, send the doc to the browser as a json object
-            else {
+            } else {
                 res.json(doc);
             }
         })
+})
+
+// Create new comment
+router.post("/articles/:id", (req, res) => {
+
+    let newComment = new Comments(req.body);
+    console.log(newComment);
+
+    newComment.save(function(err, doc) {
+
+        if (err) {
+            console.log(err);
+        }
+        // Otherwise
+        else {
+            // Use the article id to find and update it's note
+            Article.findOneAndUpdate({ "_id": req.params.id }, { "comments": doc._id })
+                // Execute the above query
+                .exec((err, doc) => {
+                    // Log any errors
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        // Or send the document to the browser
+                        res.send(doc);
+                    }
+                });
+        }
+    })
 })
 
 module.exports = router;
