@@ -2,7 +2,6 @@ const express = require("express"),
     router = express.Router(),
     request = require("request"),
     cheerio = require("cheerio"),
-    mongojs = require("mongojs"),
     Article = require("../models/Article"),
     Comments = require("../models/Comments"),
     mongoose = require("mongoose");
