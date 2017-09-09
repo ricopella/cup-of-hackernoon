@@ -12,8 +12,7 @@ let ArticleSchema = new Schema({
         required: true
     },
     desc: {
-        type: String,
-        required: true
+        type: String
     },
     url: {
         type: String

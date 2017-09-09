@@ -32,36 +32,30 @@ router.get("/articles", (req, res) => {
 
 // scrape articles
 router.get("/add", (req, res) => {
-    request("https://hackernoon.com/", (error, response, html) => {
+    request("https://hackernoon.com/latest", (error, response, html) => {
 
         let $ = cheerio.load(html);
 
-        $(".postItem").each((i, element) => {
+        $(".postArticle-content").each(function(i, element) {
 
             let result = {};
 
-            result.link = $(element).children().attr("href");
-            result.title = $(element).children().text();
+            result.link = $(this).children("a").attr("href");
+            result.title = $(this).children("a").children("section").children(".section-content").children(".section-inner").children("h3").text();
+            result.desc = $(this).children("a").children("section").children(".section-content").children(".section-inner").children("h4").text();
+            result.url = $(this).children("a").children("section").children(".section-content").children(".section-inner").children("figure").children(".aspectRatioPlaceholder.is-locked").children(".progressiveMedia.js-progressiveMedia.graf-image.is-canvasLoaded.is-imageLoaded").attr("src");
+            console.log(result);
 
-            // small hack to remove the title from the description
-            let desc = $(element).siblings().text();
-            result.desc = desc.replace(result.title, "");
 
-            // small hack to remove the link from html element
-            let img = $(element).children().attr("style");
-            let newArray = img.split(" ");
-            let newnew = newArray[1].split('"');
-            result.url = newnew[1];
+            // let entry = new Article(result);
 
-            let entry = new Article(result);
-
-            entry.save((err, doc) => {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log(doc);
-                }
-            })
+            // entry.save((err, doc) => {
+            //     if (err) {
+            //         console.log(err);
+            //     } else {
+            //         console.log(doc);
+            //     }
+            // })
         });
     });
     res.send("Scrape Complete");
