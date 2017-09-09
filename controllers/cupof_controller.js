@@ -27,26 +27,21 @@ router.get("/", (req, res) => {
 });
 
 
-router.get("/all", (req, res) => {
+router.get("/articles", (req, res) => {
 
     Article.find({}, (error, doc) => {
         if (error) {
             console.log(error);
-        }
-        // Or send the doc to the browser as a json object
-        else {
+        } else {
             res.json(doc);
         }
     });
 })
 
-
 router.get("/add", (req, res) => {
     request("https://hackernoon.com/", (error, response, html) => {
 
         let $ = cheerio.load(html);
-
-
 
         $(".postItem").each((i, element) => {
 
@@ -75,6 +70,22 @@ router.get("/add", (req, res) => {
 
     });
     res.send("Scrape Complete");
+})
+
+
+router.get("/articles/:id", (req, res) => {
+
+    Article.findOne({ "_id": req.params.id })
+        .populate("comments")
+        .exec((error, doc) => {
+            if (error) {
+                console.log(error);
+            }
+            // Otherwise, send the doc to the browser as a json object
+            else {
+                res.json(doc);
+            }
+        })
 })
 
 module.exports = router;
