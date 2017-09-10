@@ -7,8 +7,8 @@ function getResults() {
             $("#results").prepend("<p class='dataentry' data-id=" + data[i]._id +
                 "><img src=" + data[i].url + "><br /><span class='dataTitle' data-id=" +
                 data[i]._id + "><h2>" + data[i].title +
-                "</h2><a href=" + data[i].link +
-                ">More...</a></span>" + data[i].desc + "</p>" +
+                "</h2></span>" + data[i].desc + "<a class='hacklink' href=" + data[i].link +
+                ">More...</a></p>" +
                 "<button id='likebtn' data-id='" +
                 data[i]._id + "' class='btn'> Likes <span id='likesCount" + data[i]._id +
                 "' class='badge badge-secondary'>" + data[i].like +
@@ -43,8 +43,11 @@ $(document).on("click", "#comment", function() {
                             url: "articles/" + thisId + "/" + data.comments[i]
                         })
                         .done(function(data) {
+                            console.log(data);
+
                             $("#commentbox").append("<hr /><h5>" + data.title + "</h5><button type='button' data-id='" + data._id + "' data-par='" + thisId + "' class='close closecom' aria-label='Close'><span title='Delete Comment' aria-hidden='true'>&times;</span></button>");
                             $("#commentbox").append("<p>" + data.body + "</p>");
+                            $("#commentbox").append("<p class='commentdate'>Comment Date: " + moment.utc(data.createdDate).format('MM-DD-YYYY hh:MM') + "</p>");
                         })
                 }
 
@@ -79,6 +82,7 @@ $(document).on("click", "#savecomment", function() {
                                 .done(function(data) {
                                     $("#commentbox").append("<hr /><h5>" + data.title + "</h5><button type='button' data-par='" + thisId + "' data-id='" + data._id + "' class='close closecom' aria-label='Close'><span title='Delete Comment' aria-hidden='true'>&times;</span></button>");
                                     $("#commentbox").append("<p>" + data.body + "</p>");
+                                    $("#commentbox").append("<p class='commentdate'>Comment Date: " + moment.utc(data.createdDate, "MM-DD-YYYY") + "</p>");
                                 })
                         }
 
@@ -118,6 +122,8 @@ $(document).on("click", ".closecom", function() {
                                 .done(function(data) {
                                     $("#commentbox").append("<hr /><h5>" + data.title + "</h5><button type='button' data-par='" + thisId + "' data-id='" + data._id + "' class='close closecom' aria-label='Close'><span title='Delete Comment' aria-hidden='true'>&times;</span></button>");
                                     $("#commentbox").append("<p>" + data.body + "</p>");
+                                    $("#commentbox").append("<p class='commentdate'>Comment Date: " + moment.utc(data.createdDate, "MM-DD-YYYY") + "</p>");
+
                                 })
                         }
 

@@ -18,7 +18,18 @@
     text-align: center;
     color: #fff;
     padding: 18% 0;
+}
+
+#heading h1 {
     font-size: 60px;
+}
+
+#heading p {
+    font-size: 30px;
+}
+
+div#results {
+    margin-bottom: 8%;
 }
 
 button.btn {
@@ -27,6 +38,16 @@ button.btn {
 
 button.closecom {
     color: red;
+}
+
+.hacklink {
+    margin-left: 1%;
+    font-size: 12px;
+}
+
+p.commentdate {
+    color: lightgrey;
+    font-size: 12px;
 }
 
 .footer {
