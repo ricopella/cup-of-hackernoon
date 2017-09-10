@@ -17,9 +17,6 @@ app.set("view engine", "handlebars");
 
 app.use("/", routes);
 
-app.use((req, res, next) => {
-    res.status(404).send("Sorry can't find that!");
-    // console.error(err.stack).red
-});
+app.use((req, res) => res.status(404).send("Sorry can't find that!"));
 
 app.listen(port, () => { console.log(`==> 🌎  Listening on PORT ${port}. Visit http://localhost:${port}`.green) });

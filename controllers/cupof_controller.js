@@ -65,7 +65,18 @@ router.get("/add", (req, res) => {
 router.get("/articles/:id", (req, res) => {
 
     Article.findOne({ "_id": req.params.id })
-        .populate("comments")
+        // .populate("comments")
+        .exec((error, doc) => {
+            if (error) {
+                console.log(error);
+            } else {
+                res.json(doc);
+            }
+        })
+})
+
+router.get("/articles/:id/:comment", (req, res) => {
+    Comments.findOne({ "_id": req.params.comment })
         .exec((error, doc) => {
             if (error) {
                 console.log(error);
@@ -78,7 +89,6 @@ router.get("/articles/:id", (req, res) => {
 // Create new comment
 router.post("/articles/:id", (req, res) => {
 
-    let reqid = req.params.id;
     let newComment = new Comments(req.body);
     // console.log(newComment);
     newComment.save(function(err, doc) {
@@ -90,19 +100,20 @@ router.post("/articles/:id", (req, res) => {
         // Otherwise
         else {
             // Use the article id to find and update it's note
-            Article.findOne({ "_id": reqid })
-                // Execute the above query
-                .exec((err, doc) => {
-                    // Log any errors
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        // Or send the document to the browser
-                        res.send(doc);
-                    }
-                });
+            Article.findOneAndUpdate({ "_id": req.params.id }, { $push: { "comments": doc._id } }, { new: true })
+
+            .exec(function(err, doc) {
+                // Log any errors
+                if (err) {
+                    console.log(err);
+                } else {
+                    // Or send the document to the browser
+                    res.send(doc);
+                }
+            });
         }
     })
 })
+
 
 module.exports = router;

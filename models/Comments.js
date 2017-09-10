@@ -8,9 +8,13 @@ let CommentsSchema = new Schema({
     },
     body: {
         type: String
+    },
+    createdDate: {
+        type: Date,
+        default: Date.now
     }
 });
 
-let Comments = mongoose.model("Comments", CommentsSchema);
+let Comments = mongoose.model("Comments", CommentsSchema, "comment");
 
 module.exports = Comments;

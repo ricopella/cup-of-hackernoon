@@ -17,10 +17,10 @@ let ArticleSchema = new Schema({
     url: {
         type: String
     },
-    comments: {
+    comments: [{
         type: Schema.Types.ObjectId,
         ref: "Comments"
-    }
+    }]
 });
 
 let Article = mongoose.model("Article", ArticleSchema);
