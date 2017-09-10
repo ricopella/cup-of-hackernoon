@@ -43,19 +43,19 @@ router.get("/add", (req, res) => {
             result.link = $(this).children("a").attr("href");
             result.title = $(this).children("a").children("section").children(".section-content").children(".section-inner").children("h3").text();
             result.desc = $(this).children("a").children("section").children(".section-content").children(".section-inner").children("h4").text();
-            result.url = $(this).children("a").children("section").children(".section-content").children(".section-inner").children("figure").children(".aspectRatioPlaceholder.is-locked").children(".progressiveMedia.js-progressiveMedia.graf-image.is-canvasLoaded.is-imageLoaded").attr("src");
-            console.log(result);
+            // result.url = $(this).children("a").children("section").children(".section-content").children(".section-inner.sectionLayout--insetColumn").children("figure.graf.graf--figure.graf--layoutCroppedHeightPreview.graf-after--h3").children(".aspectRatioPlaceholder.is-locked").children(".progressiveMedia.js-progressiveMedia.graf-image.is-canvasLoaded.is-imageLoaded").children(".js-progressiveMedia-inner").attr("src");
+            // console.log(result);
 
 
-            // let entry = new Article(result);
+            let entry = new Article(result);
 
-            // entry.save((err, doc) => {
-            //     if (err) {
-            //         console.log(err);
-            //     } else {
-            //         console.log(doc);
-            //     }
-            // })
+            entry.save((err, doc) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log(doc);
+                }
+            })
         });
     });
     res.send("Scrape Complete");
@@ -78,10 +78,11 @@ router.get("/articles/:id", (req, res) => {
 // Create new comment
 router.post("/articles/:id", (req, res) => {
 
+    let reqid = req.params.id;
     let newComment = new Comments(req.body);
-    console.log(newComment);
-
+    // console.log(newComment);
     newComment.save(function(err, doc) {
+        console.log(doc);
 
         if (err) {
             console.log(err);
@@ -89,7 +90,7 @@ router.post("/articles/:id", (req, res) => {
         // Otherwise
         else {
             // Use the article id to find and update it's note
-            Article.findOneAndUpdate({ "_id": req.params.id }, { "comments": doc._id })
+            Article.findOne({ "_id": reqid })
                 // Execute the above query
                 .exec((err, doc) => {
                     // Log any errors
