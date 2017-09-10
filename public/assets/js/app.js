@@ -43,8 +43,7 @@ $(document).on("click", "#comment", function() {
                             url: "articles/" + thisId + "/" + data.comments[i]
                         })
                         .done(function(data) {
-                            $("#commentbox").append("<hr />");
-                            $("#commentbox").append("<h5>" + data.title + "</h5><button type='button' data-id='" + data._id + "' data-par='" + thisId + "' class='close closecom' aria-label='Close'><span title='Delete Comment' aria-hidden='true'>&times;</span></button>");
+                            $("#commentbox").append("<hr /><h5>" + data.title + "</h5><button type='button' data-id='" + data._id + "' data-par='" + thisId + "' class='close closecom' aria-label='Close'><span title='Delete Comment' aria-hidden='true'>&times;</span></button>");
                             $("#commentbox").append("<p>" + data.body + "</p>");
                         })
                 }
@@ -78,8 +77,7 @@ $(document).on("click", "#savecomment", function() {
                                     url: "articles/" + thisId + "/" + data.comments[i]
                                 })
                                 .done(function(data) {
-                                    $("#commentbox").append("<hr />");
-                                    $("#commentbox").append("<h5>" + data.title + "</h5><button type='button' data-par='" + thisId + "' data-id='" + data._id + "' class='close closecom' aria-label='Close'><span title='Delete Comment' aria-hidden='true'>&times;</span></button>");
+                                    $("#commentbox").append("<hr /><h5>" + data.title + "</h5><button type='button' data-par='" + thisId + "' data-id='" + data._id + "' class='close closecom' aria-label='Close'><span title='Delete Comment' aria-hidden='true'>&times;</span></button>");
                                     $("#commentbox").append("<p>" + data.body + "</p>");
                                 })
                         }
@@ -97,8 +95,6 @@ $(document).on("click", "#savecomment", function() {
 $(document).on("click", ".closecom", function() {
     let thisId = $(this).attr("data-id");
     let articleId = $(this).attr("data-par");
-    console.log("Article: " + articleId);
-    console.log("Comment: " + thisId);
 
     $.ajax({
             method: "DELETE",
@@ -106,7 +102,27 @@ $(document).on("click", ".closecom", function() {
             url: "articles/" + articleId + "/" + thisId
         })
         .done(function(data) {
-            console.log("deleted!");
+            $.ajax({
+                    method: "GET",
+                    url: "articles/" + articleId
+                })
+                .done(function(data) {
+                    $("#commentbox").empty();
+                    if (data.comments) {
+
+                        for (let i = 0; i < data.comments.length; i++) {
+                            $.ajax({
+                                    method: "GET",
+                                    url: "articles/" + articleId + "/" + data.comments[i]
+                                })
+                                .done(function(data) {
+                                    $("#commentbox").append("<hr /><h5>" + data.title + "</h5><button type='button' data-par='" + thisId + "' data-id='" + data._id + "' class='close closecom' aria-label='Close'><span title='Delete Comment' aria-hidden='true'>&times;</span></button>");
+                                    $("#commentbox").append("<p>" + data.body + "</p>");
+                                })
+                        }
+
+                    }
+                })
         })
 })
 

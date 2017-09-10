@@ -140,8 +140,16 @@ router.post("/articles/:id/like", (req, res) => {
 
 // delete comment
 router.delete("/articles/:articleId/:commentId", (req, res) => {
-    console.log("im here!");
-    Article.remove({ "_id": req.params.articleId, "comments": req.params.commentId })
+    Comments.remove({
+            "_id": req.params.commentId
+        })
+        .exec(function(err, doc) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.send(doc);
+            }
+        })
 })
 
 

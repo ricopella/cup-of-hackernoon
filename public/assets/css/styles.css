@@ -25,6 +25,10 @@ button.btn {
     margin-right: 1%;
 }
 
+button.closecom {
+    color: red;
+}
+
 .footer {
     background-color: #efefef;
     color: #d0cfd0;
