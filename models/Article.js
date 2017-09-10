@@ -17,6 +17,10 @@ let ArticleSchema = new Schema({
     url: {
         type: String
     },
+    like: {
+        type: Number,
+        default: 0
+    },
     comments: [{
         type: Schema.Types.ObjectId,
         ref: "Comments"

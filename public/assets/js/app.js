@@ -4,8 +4,13 @@ function getResults() {
 
     $.getJSON("/articles", (data) => {
         for (var i = 0; i < data.length; i++) {
-            $("#results").prepend("<p class='dataentry' data-id=" + data[i]._id + "><img src=" + data[i].url + "><br /><span class='dataTitle' data-id=" +
-                data[i]._id + "><h2>" + data[i].title + "</h2><a href=" + data[i].link + ">More...</a></span>" + data[i].desc + "<a href='*'> + LIKE + </a></p><button type='button' id='comment' class='btn btn-primary' data-toggle='modal' data-target='commentModal' data-id=" +
+            $("#results").prepend("<p class='dataentry' data-id=" + data[i]._id +
+                "><img src=" + data[i].url + "><br /><span class='dataTitle' data-id=" +
+                data[i]._id + "><h2>" + data[i].title +
+                "</h2><a href=" + data[i].link +
+                ">More...</a></span>" + data[i].desc + "</p>" +
+                "<button id='likebtn' data-id='" +
+                data[i]._id + "' class='btn'> Likes <span id='likesCount" + data[i]._id + "' class='badge badge-secondary'>" + data[i].like + "</span></button><button type='button' id='comment' class='btn btn-primary' data-toggle='modal' data-target='commentModal' data-id=" +
                 data[i]._id + ">Comment</button>");
         }
     });
@@ -93,7 +98,34 @@ $(document).on("click", "#savecomment", function() {
     $("#body").val("");
 })
 
+$(document).on("click", "#likebtn", function() {
+    let thisId = $(this).attr("data-id");
+    $.ajax({
+            method: "GET",
+            url: "articles/" + thisId
+        })
+        .done(function(data) {
 
-
+            let newLike = data.like + 1;
+            console.log(newLike);
+            $.ajax({
+                    method: "POST",
+                    url: "articles/" + thisId + "/like",
+                    data: {
+                        likes: newLike
+                    }
+                })
+                .done(function(data) {
+                    $.ajax({
+                            method: "GET",
+                            url: "articles/" + thisId
+                        })
+                        .done(function(data) {
+                            console.log(data);
+                            $("#likesCount" + data._id).text(data.like);
+                        })
+                })
+        })
+})
 
 getResults();

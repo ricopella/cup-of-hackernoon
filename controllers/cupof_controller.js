@@ -115,5 +115,21 @@ router.post("/articles/:id", (req, res) => {
     })
 })
 
+router.post("/articles/:id/like", (req, res) => {
+
+    console.log(req.body);
+    Article.findOneAndUpdate({ "_id": req.params.id }, { "like": req.body.likes })
+
+    .exec(function(err, doc) {
+        // Log any errors
+        if (err) {
+            console.log(err);
+        } else {
+            // Or send the document to the browser
+            res.send(doc);
+        }
+    });
+})
+
 
 module.exports = router;
