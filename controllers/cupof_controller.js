@@ -75,6 +75,7 @@ router.get("/articles/:id", (req, res) => {
         })
 })
 
+// retrieve comments
 router.get("/articles/:id/:comment", (req, res) => {
     Comments.findOne({ "_id": req.params.comment })
         .exec((error, doc) => {
@@ -92,7 +93,6 @@ router.post("/articles/:id", (req, res) => {
     let newComment = new Comments(req.body);
     // console.log(newComment);
     newComment.save(function(err, doc) {
-        console.log(doc);
 
         if (err) {
             console.log(err);
@@ -115,17 +115,15 @@ router.post("/articles/:id", (req, res) => {
     })
 })
 
+// Update Likes
 router.post("/articles/:id/like", (req, res) => {
 
-    console.log(req.body);
     Article.findOneAndUpdate({ "_id": req.params.id }, { "like": req.body.likes })
 
     .exec(function(err, doc) {
-        // Log any errors
         if (err) {
             console.log(err);
         } else {
-            // Or send the document to the browser
             res.send(doc);
         }
     });
