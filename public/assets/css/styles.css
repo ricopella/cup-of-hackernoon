@@ -1,0 +1,38 @@
+* {
+    font-family: 'Yantramanav', sans-serif;
+}
+
+#logo-nav {
+    width: 8%;
+}
+
+#heading {
+    background: transparent;
+    min-height: 100%;
+    position: relative;
+    background: url("../images/bgimg.jpg") center center fixed no-repeat;
+    background-size: cover;
+}
+
+#heading .intro-text {
+    text-align: center;
+    color: #fff;
+    padding: 18% 0;
+    font-size: 60px;
+}
+
+button.btn {
+    margin-right: 1%;
+}
+
+.footer {
+    background-color: #efefef;
+    color: #d0cfd0;
+    position: fixed;
+    bottom: 0;
+    width: 100vw
+}
+
+.footer p {
+    padding-top: 1%;
+}

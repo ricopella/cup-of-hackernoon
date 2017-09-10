@@ -18,9 +18,8 @@ db.once("open", () => console.log("Mongoose connection successful."));
 // index route
 router.get("/", (req, res) => res.render("index"));
 
-// retrieve all articles
+// retrieve all articles on load of home page
 router.get("/articles", (req, res) => {
-
     Article.find({}, (error, doc) => {
         if (error) {
             console.log(error);
@@ -43,9 +42,6 @@ router.get("/add", (req, res) => {
             result.link = $(this).children("a").attr("href");
             result.title = $(this).children("a").children("section").children(".section-content").children(".section-inner").children("h3").text();
             result.desc = $(this).children("a").children("section").children(".section-content").children(".section-inner").children("h4").text();
-            // result.url = $(this).children("a").children("section").children(".section-content").children(".section-inner.sectionLayout--insetColumn").children("figure.graf.graf--figure.graf--layoutCroppedHeightPreview.graf-after--h3").children(".aspectRatioPlaceholder.is-locked").children(".progressiveMedia.js-progressiveMedia.graf-image.is-canvasLoaded.is-imageLoaded").children(".js-progressiveMedia-inner").attr("src");
-            // console.log(result);
-
 
             let entry = new Article(result);
 
@@ -127,6 +123,25 @@ router.post("/articles/:id/like", (req, res) => {
             res.send(doc);
         }
     });
+})
+
+router.post("/articles/:id/like", (req, res) => {
+
+    Article.findOneAndUpdate({ "_id": req.params.id }, { "like": req.body.likes })
+
+    .exec(function(err, doc) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(doc);
+        }
+    });
+})
+
+// delete comment
+router.delete("/articles/:articleId/:commentId", (req, res) => {
+    console.log("im here!");
+    Article.remove({ "_id": req.params.articleId, "comments": req.params.commentId })
 })
 
 
