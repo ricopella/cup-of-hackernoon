@@ -1,4 +1,4 @@
-# Cup of Hacker Noon &middot; [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)](https://github.com/ellerbrock/open-source-badge/) &middot; [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+# A Cup of Hacker Noon &middot; [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)](https://github.com/ellerbrock/open-source-badge/) &middot; [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
 A news scraping site pulling the freshest brewed stories from [Hacker Noon](https://hackernoon.com/latest). Viewers are able to like & comment on each article.
 
