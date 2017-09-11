@@ -184,7 +184,9 @@ $(document).on("click", "#nav-scrape", function() {
             url: "add/"
         })
         .done(function(data) {
-            location.reload(true);
+            $(".close").on("click", function() {
+                location.reload(true);
+            });
         })
 })
 
