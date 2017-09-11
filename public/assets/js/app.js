@@ -9,12 +9,12 @@ function getResults() {
                 data[i]._id + "><h2>" + data[i].title +
                 "</h2></span><h5>" + data[i].desc + "</h5>" + data[i].descp + "<a class='hacklink' target='_blank' href=" + data[i].link +
                 "> Read Article...</a></p>" +
-                "<button id='likebtn' data-id='" +
+                "<button type='button' id='comment' class='btn btn-primary'" +
+                "data-toggle='modal' data-target='commentModal' data-id=" +
+                data[i]._id + ">Comment</button><button id='likebtn' data-id='" +
                 data[i]._id + "' class='btn btn-success'> Likes <span id='likesCount" + data[i]._id +
                 "' class='badge badge-pill badge-light'>" + data[i].like +
-                "</span></button><button type='button' id='comment' class='btn btn-primary'" +
-                "data-toggle='modal' data-target='commentModal' data-id=" +
-                data[i]._id + ">Comment</button>");
+                "</span></button>");
         }
     });
 }
