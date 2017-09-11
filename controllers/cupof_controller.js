@@ -7,7 +7,7 @@ const express = require("express"),
     mongoose = require("mongoose");
 
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://localhost/cupof");
+mongoose.connect("mongodb://heroku_qdvcm8fx:5or28ocvkangodi5mjgkiarhu7@ds129434.mlab.com:29434/heroku_qdvcm8fxf");
 
 const db = mongoose.connection;
 
