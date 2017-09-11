@@ -7,11 +7,11 @@ function getResults() {
             $("#results").prepend("<p class='dataentry' data-id=" + data[i]._id +
                 "><img src=" + data[i].url + "><br /><span class='dataTitle' data-id=" +
                 data[i]._id + "><h2>" + data[i].title +
-                "</h2></span>" + data[i].desc + "<a class='hacklink' href=" + data[i].link +
-                ">More...</a></p>" +
+                "</h2></span><h5>" + data[i].desc + "</h5>" + data[i].descp + "<a class='hacklink' target='_blank' href=" + data[i].link +
+                "> Read Article...</a></p>" +
                 "<button id='likebtn' data-id='" +
-                data[i]._id + "' class='btn'> Likes <span id='likesCount" + data[i]._id +
-                "' class='badge badge-secondary'>" + data[i].like +
+                data[i]._id + "' class='btn btn-success'> Likes <span id='likesCount" + data[i]._id +
+                "' class='badge badge-pill badge-light'>" + data[i].like +
                 "</span></button><button type='button' id='comment' class='btn btn-primary'" +
                 "data-toggle='modal' data-target='commentModal' data-id=" +
                 data[i]._id + ">Comment</button>");
@@ -51,7 +51,10 @@ $(document).on("click", "#comment", function() {
                         })
                 }
 
+            } else {
+                $("#commentbox").append("<p> Be the first to comment! </p>");
             }
+
         })
 })
 
@@ -82,9 +85,12 @@ $(document).on("click", "#savecomment", function() {
                                 .done(function(data) {
                                     $("#commentbox").append("<hr /><h5>" + data.title + "</h5><button type='button' data-par='" + thisId + "' data-id='" + data._id + "' class='close closecom' aria-label='Close'><span title='Delete Comment' aria-hidden='true'>&times;</span></button>");
                                     $("#commentbox").append("<p>" + data.body + "</p>");
-                                    $("#commentbox").append("<p class='commentdate'>Comment Date: " + moment.utc(data.createdDate, "MM-DD-YYYY") + "</p>");
+                                    $("#commentbox").append("<p class='commentdate'>Comment Date: " + moment.utc(data.createdDate).format('MM-DD-YYYY hh:MM') + "</p>");
                                 })
                         }
+
+                    } else {
+                        $("#commentbox").append("<p> Be the first to comment! </p>");
 
                     }
                 })
@@ -122,10 +128,14 @@ $(document).on("click", ".closecom", function() {
                                 .done(function(data) {
                                     $("#commentbox").append("<hr /><h5>" + data.title + "</h5><button type='button' data-par='" + thisId + "' data-id='" + data._id + "' class='close closecom' aria-label='Close'><span title='Delete Comment' aria-hidden='true'>&times;</span></button>");
                                     $("#commentbox").append("<p>" + data.body + "</p>");
-                                    $("#commentbox").append("<p class='commentdate'>Comment Date: " + moment.utc(data.createdDate, "MM-DD-YYYY") + "</p>");
+                                    $("#commentbox").append("<p class='commentdate'>Comment Date: " + moment.utc(data.createdDate).format('MM-DD-YYYY hh:MM') + "</p>");
 
                                 })
                         }
+
+                    } else {
+
+                        $("#commentbox").append("<p> Be the first to comment! </p>");
 
                     }
                 })
@@ -164,6 +174,20 @@ $(document).on("click", "#likebtn", function() {
         })
 })
 
+// retrieve comments
+$(document).on("click", "#nav-scrape", function() {
+
+    $('#scrapeModal').modal('toggle');
+
+    $.ajax({
+            method: "GET",
+            url: "add/"
+        })
+        .done(function(data) {
+            location.reload(true);
+        })
+})
+
 
 // nav slide effects
 
@@ -180,7 +204,6 @@ $("#nav-articles").on("click", () => {
     }, 1000);
 });
 
-
 $(document).ready(function() {
     getResults();
-});
+})

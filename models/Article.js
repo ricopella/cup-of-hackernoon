@@ -14,6 +14,9 @@ let ArticleSchema = new Schema({
     desc: {
         type: String
     },
+    descp: {
+        type: String
+    },
     url: {
         type: String
     },

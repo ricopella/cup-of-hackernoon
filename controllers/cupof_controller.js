@@ -42,6 +42,7 @@ router.get("/add", (req, res) => {
             result.link = $(this).children("a").attr("href");
             result.title = $(this).children("a").children("section").children(".section-content").children(".section-inner").children("h3").text();
             result.desc = $(this).children("a").children("section").children(".section-content").children(".section-inner").children("h4").text();
+            result.descp = $(this).children("a").children("section").children(".section-content").children(".section-inner").children("p").text();
 
             let entry = new Article(result);
 
